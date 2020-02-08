@@ -1,4 +1,4 @@
- #include <EEPROM.h>
+#include <EEPROM.h>
 #include <Keypad.h>
 #include <DS3231.h>
 #include <SPI.h>
@@ -17,142 +17,21 @@ RTCDateTime t;
 #define OLED_RESET    -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET); //Declaring the display name (display)
-int Hor, Min, Sec, tim, dat, h, m, s;
+int Hor, Min, Sec, tim, h, m, s;
 int ASCII = 48;
 char key = 0;
 char buffer[2];
-
-const byte numRows= 4;
-const byte numCols= 4;
-char keymap[numRows][numCols]=
-{
-{'1', '2', '3', 'A'},
-{'4', '5', '6', 'B'},
-{'7', '8', '9', 'C'},
-{'*', '0', '#', 'D'}
-};
-byte rowPins[numRows] = {9, 8, 7, 6};
-byte colPins[numCols]= {5, 4, 3, 2};
-Keypad myKeypad= Keypad(makeKeymap(keymap), rowPins, colPins, numRows, numCols);
-void setup() {
-  Serial.begin(9600);
-   servo1.attach(10);
-   servoVal=15;
-  servo1.write(servoVal);
-Wire.begin();
-clock.begin();
-pinMode(buz, OUTPUT);
-display.begin(SSD1306_SWITCHCAPVCC);
-display.clearDisplay();
-display.setTextColor(WHITE);
-display.setTextSize(1);
-welcome();
-//uncomment these lines to set the date and time
-//rtc.setDOW(SATURDAY); // Set Day-of-Week to SUNDAY
-//rtc.setTime(10, 54, 0); // Set the time to 12:00:00 (24hr format)
-//rtc.setDate(7, 1, 2017); // Day, Month, Year
-}
-void loop() {
-t = clock.getDateTime();
-Hor = t.hour;
-Min = t.minute;
-Sec = t.second;
+bool dat=false;
+void welcome(){
 
 
-//tim = clock.getTime();
-//dat = clock.getDate();
-char key = myKeypad.getKey();
-if (key == 'C'){
-
-EEPROM.write(2, ASCII+6);
-EEPROM.write(3, ASCII);
-
-servo1.write(15);
-}
-
-if(key == '#'){
-  
-display.clearDisplay();
-display.setCursor(0,12);
-display.print("Enter New Time");
-display.setCursor(0,20);
+display.setCursor(15,11);
+display.print(" Welcome To ");
 display.display();
-
-int j =0;
-int i=0;
-while( j<6)
-{
-  if(i==2 || i == 5){
-  display.print(":");
-  display.display();
-  i++;
-}
-key=myKeypad.getKey();
-if(key)
-{
-  display.print(key);
-   display.display();
-  EEPROM.write(j,key);
-j++;
-i++;
-}
-}
-}
-if(key=='*')
-{
-  display.clearDisplay();
-display.setCursor(0,12);
-display.print("Enter Feeding Time");
-display.setCursor(0,20);
+display.setCursor(15,21);
+display.print("Cuongslab <3 ");
 display.display();
-int k=7;
-int h=0;
-while(k<9)
-{
-  if(h==2){
-  display.print(";");
-  display.display();
-  h++;
-}
-key=myKeypad.getKey();
-if(key)
-{
-  display.print(key);
-   display.display();
-  EEPROM.write(k,key);
-k++;
-h++;
-buffer[0]=EEPROM.read(7);
-buffer[1]=EEPROM.read(8);
-tim = atoi(buffer);
-delay(200);
-} }}
-changealarm();
-checkalarm();
-timedate();
-Serial.println(tim);
-}
-void checkalarm(){
-if( Hor == h && Min == m)
-{
-display.clearDisplay();
-display.setCursor(0,11);
-display.print("Hold C to stop feeding ");
-display.display();
-servo1.write(70);
-delay(tim*100);
-if (key == 'C'){
-
-EEPROM.write(2, ASCII+6);
-EEPROM.write(3, ASCII);
-
-servo1.write(15);
-}
-
-}
-else
-servo1.write(15);
-
+delay(4000);
 }
 void changealarm(){
 buffer[0]=EEPROM.read(0);
@@ -188,22 +67,109 @@ display.print(m);
 display.print(":");
 display.print(s);
 display.display();
-
 }
-void turn()
+
+
+const byte numRows= 4;
+const byte numCols= 4;
+char keymap[numRows][numCols]=
 {
-servo1.write(70);
-delay(tim*100);
+{'1', '2', '3', 'A'},
+{'4', '5', '6', 'B'},
+{'7', '8', '9', 'C'},
+{'*', '0', '#', 'D'}
+};
+byte rowPins[numRows] = {9, 8, 7, 6};
+byte colPins[numCols]= {5, 4, 3, 2};
+Keypad myKeypad= Keypad(makeKeymap(keymap), rowPins, colPins, numRows, numCols);
+void setup() {
+  Serial.begin(9600);
+   servo1.attach(10);
 
-  }
-void welcome(){
+  servo1.write(15);
+Wire.begin();
+clock.begin();
 
-
-display.setCursor(15,11);
-display.print(" Welcome To ");
-display.display();
-display.setCursor(15,21);
-display.print("Cuongslab <3 ");
-display.display();
-delay(5000);
+display.begin(SSD1306_SWITCHCAPVCC);
+display.clearDisplay();
+display.setTextColor(WHITE);
+display.setTextSize(1);
+welcome();
+//uncomment these lines to set the date and time
+//rtc.setDOW(SATURDAY); // Set Day-of-Week to SUNDAY
+//rtc.setTime(10, 54, 0); // Set the time to 12:00:00 (24hr format)
+//rtc.setDate(7, 1, 2017); // Day, Month, Year
 }
+void loop() {
+t = clock.getDateTime();
+Hor = t.hour;
+Min = t.minute;
+Sec = t.second;
+
+
+//tim = clock.getTime();
+//dat = clock.getDate();
+char key = myKeypad.getKey();
+
+if (key == 'C'){
+
+EEPROM.write(2, ASCII+6);
+EEPROM.write(3, ASCII);
+
+servo1.write(15);
+}
+
+
+if(key == '#'){
+  
+display.clearDisplay();
+display.setCursor(0,12);
+display.print("Enter New Time");
+display.setCursor(0,20);
+display.display();
+
+int j =0;
+int i=0;
+while( j<6) //ở đây có thể sửa setup alarm
+{
+  if(i==2 || i == 5){
+  display.print(":");
+  display.display();
+  i++;
+}
+key=myKeypad.getKey();
+if(key)
+{
+  display.print(key);
+   display.display();
+  EEPROM.write(j,key);
+j++;
+i++;
+}
+}
+}
+if(key == '*'){
+  servo1.write(71);
+  }
+changealarm();
+checkalarm();
+if(dat==false)
+timedate();
+
+}
+void checkalarm(){
+
+ if( Hor == h && Min == m&&Sec<7) //bug lớn nhất là ở đây, tạm thời c có thể thay 7 bắng 1 số giây khác
+{
+display.clearDisplay();
+display.setCursor(0,11);
+display.print("Hold C to stop feeding ");
+display.display();
+ servo1.write(70);
+dat=true;
+  }
+  else{
+  servo1.write(15);
+  dat=false;
+  }
+}}
