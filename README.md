@@ -14,5 +14,5 @@ xx:60:xx
 Bên phần cứng t có cắt 2 cái chai. Chắc c nên dùng cái có nắp vì mèo nhà c hơi to, c có thể tháo lắp dễ dàng tiện cho việc rửa sạch
 t cũng hơ lửa qua phần nắp r, chắc cũng k quá sắc tới đứt tay đâu
 
-Về cơ bản là đơn giản v thôi, c thông vảm vì t cũng chỉ nảy ra ý tưởng k lâu và bị bug suốt nên t k thể làm chuẩn chỉ dc.
+Về cơ bản là đơn giản v thôi, c thông cảm vì t cũng chỉ nảy ra ý tưởng k lâu và bị bug suốt nên t k thể làm chuẩn chỉ dc.
 
